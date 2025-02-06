@@ -1,2 +1,2 @@
-# Config_Arch
- 
+# ArchConfig
+This is my Archlinux config on my main computer.
