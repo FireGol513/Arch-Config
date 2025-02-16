@@ -1,38 +1,76 @@
-#This script has the goal to Dual-Boot Windows and Arch-Linux on my GamingPC 
-#This is the steps to achieve this
+#!/bin/bash
 
-#Can be helpful https://wiki.archlinux.org/title/General_recommendations
+#All executed commands are printed to the terminal
+set -x
 
-#Install Windows on a partition before install Arch
-timedatectl set-timezone America/New_York
-pacman -Syy archlinux-keyring 
-pacstrap -K /mnt base linux linux-firmware networkmanager grub efibootmgr
-genfstab -U /mnt >> /etc/fstab
-arch-chroot /mnt # Gonna be a problem !!!
-mkinitcpio -P
+#Initial ramdisk ?
+mkinitcpio -P 
+
+#Set the time zone
 ln -sf /usr/share/zoneinfo/America/New_York /etc/localtime
-hwclock -s -u
-pacman -Syu vim
+
+#Set the hardware clock to UTC
+hwclock -wu
+
+#Install a CLI text editor
+pacman -S vim --no-confirm
+
 #Uncomment en_US.UTF-8 UTF-8 and ca_FR.UTF-8 UTF-8 in /etc/locale.gen
+cat /etc/locale.gen | sed -e 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' -e 's/#ca_FR.UTF-8 UTF-8/ca_FR.UTF-8 UTF-8/' > /tmp/locale.gen
+cp /tmp/locale.gen /etc/locale.gen
+
+#Generated the locale (what we uncomment before)
 locale-gen
+
+#Default keyboard language when boot
 echo LANG=en_US.UTF-8 > /etc/locale.conf
+
+#Temporary put default keyboard language for continue the config
 export LANG=en_US.UTF-8
+
+#Create my main user
 useradd -m -g users -G wheel,power,storage firegol513 -s /bin/bash
+
+#Change my main user password
+echo 'Write my main user password'
 passwd firegol513
+
+#Change my root password
+echo 'Write my root password'
 passwd
+
+#Hostname of the computer
 echo arch-firepc > /etc/hostname
+
+#
 grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB --removable
+
+#
 grub-mkconfig -o /boot/grub/grub.cfg
+
+#Initial ramdisk ?
 mkinitcpio -P
+
+#
 systemctl enable fstrim.timer
+
+#
 systemctl enable NetworkManager
+
+#
 systemctl enable systemd-timesyncd
 
+#
 #Uncomment multilib (Include = /etc/pacman.d/mirrorlist) in /etc/pacman.conf
+
+#
+#NVIDIA?
 pacman -S linux-headers git base-devel intel-ucode nvidia nvidia-settings opencl-nvidia nvidia-utils vulkan-icd-loader #Probably in a other script
+
+#
 #Uncomment in visudo the %wheel + Defaults rootpw + Defaults insults
 
-#NVIDIA?
+
 
 #In /etc/mkinitcpio.conf, add nvidia nvidia_modeset nvidia_uvm nvidia_drm to MODULES and remove kms from HOOKS
 
