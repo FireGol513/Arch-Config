@@ -17,7 +17,7 @@ timedatectl set-timezone America/New_York
 pacman -Syy archlinux-keyring --no-confirm
 
 #Install the basic package for the arch linux environnement
-pacstrap -K /mnt base linux linux-firmware networkmanager grub efibootmgr
+pacstrap -K /mnt base linux linux-firmware networkmanager grub efibootmgr sudo
 
 #Generated automatic mounting point when we boot
 genfstab -U /mnt >> /etc/fstab

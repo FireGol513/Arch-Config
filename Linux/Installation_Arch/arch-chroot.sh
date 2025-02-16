@@ -42,34 +42,37 @@ passwd
 #Hostname of the computer
 echo arch-firepc > /etc/hostname
 
-#
+#Installation of grub (bootmgr)
 grub-install --target=x86_64-efi --efi-directory=/boot/efi --bootloader-id=GRUB --removable
 
-#
+#Configuration of grub when we boot
 grub-mkconfig -o /boot/grub/grub.cfg
 
 #Initial ramdisk ?
 mkinitcpio -P
 
-#
+#Extend life of SSD?
 systemctl enable fstrim.timer
 
-#
+#Network Configuration (Need to use it more)
 systemctl enable NetworkManager
 
-#
+#Simple Time protocol client (SNTP not NTP)
 systemctl enable systemd-timesyncd
 
-#
 #Uncomment multilib (Include = /etc/pacman.d/mirrorlist) in /etc/pacman.conf
+sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf
+
+#NVIDIA?
+#
 
 #
-#NVIDIA?
 pacman -S linux-headers git base-devel intel-ucode nvidia nvidia-settings opencl-nvidia nvidia-utils vulkan-icd-loader #Probably in a other script
 
-#
 #Uncomment in visudo the %wheel + Defaults rootpw + Defaults insults
-
+sed -i "# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/" /etc/sudoers
+sed -i "s/# Defaults targetpw /Defaults rootpw/" /etc/sudoers
+echo "Defaults insults" >> /etc/sudoers
 
 
 #In /etc/mkinitcpio.conf, add nvidia nvidia_modeset nvidia_uvm nvidia_drm to MODULES and remove kms from HOOKS
