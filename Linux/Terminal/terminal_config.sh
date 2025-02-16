@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -x
 
 #Install yay 
 cd /opt

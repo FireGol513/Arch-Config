@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #All executed commands are printed to the terminal
-set -x
+set -e
 
 #Initial ramdisk ?
 mkinitcpio -P 
@@ -12,8 +12,8 @@ ln -sf /usr/share/zoneinfo/America/New_York /etc/localtime
 #Set the hardware clock to UTC
 hwclock -wu
 
-#Install a CLI text editor
-pacman -S vim --no-confirm
+#Install a CLI text editor and utils
+pacman -S linux-headers git base-devel vim --no-confirm
 
 #Uncomment en_US.UTF-8 UTF-8 and ca_FR.UTF-8 UTF-8 in /etc/locale.gen
 cat /etc/locale.gen | sed -e 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' -e 's/#ca_FR.UTF-8 UTF-8/ca_FR.UTF-8 UTF-8/' > /tmp/locale.gen
@@ -63,16 +63,33 @@ systemctl enable systemd-timesyncd
 #Uncomment multilib (Include = /etc/pacman.d/mirrorlist) in /etc/pacman.conf
 sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf
 
-#NVIDIA?
-#
-
-#
-pacman -S linux-headers git base-devel intel-ucode nvidia nvidia-settings opencl-nvidia nvidia-utils vulkan-icd-loader #Probably in a other script
-
 #Uncomment in visudo the %wheel + Defaults rootpw + Defaults insults
 sed -i "# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/" /etc/sudoers
 sed -i "s/# Defaults targetpw /Defaults rootpw/" /etc/sudoers
 echo "Defaults insults" >> /etc/sudoers
+
+#Copy the repo somewhere (all this files)
+mkdir /home/firegol513/Repo
+git clone https://github.com/FireGol513/ArchConfig.git /home/firegol513/Repo
+
+#Run script for terminal
+
+#Run script for installing apps
+pacman -S sddm hyprland waybar #Probably in a other script
+pacman -S pipewire pipewire-audio pipewire-alsa pipewire-pulse pipewire-jack wireplumber #Probably in a other script
+systemctl enable sddm
+yay -Syu librewolf-bin rofi-lbonn-wayland
+
+#Run script for configurationj of Hyprland
+#Change keybinds in ~/.config/hypr/hyprland.conf
+
+#NVIDIA driver OR AMD driver OR Intel driver OR None
+#
+
+#
+pacman -S  intel-ucode nvidia nvidia-settings opencl-nvidia nvidia-utils vulkan-icd-loader #Probably in a other script
+
+
 
 
 #In /etc/mkinitcpio.conf, add nvidia nvidia_modeset nvidia_uvm nvidia_drm to MODULES and remove kms from HOOKS
@@ -100,14 +117,7 @@ echo "Defaults insults" >> /etc/sudoers
 #NeedsTargets
 #Exec=/bin/sh -c 'while read -r trg; do case $trg in linux*) exit 0; esac; done; /usr/bin/mkinitcpio -P'
 
-#Next steps
-#Copy the repo somewhere (all this files)
-#Run script for terminal
-pacman -S sddm hyprland waybar #Probably in a other script
-pacman -S pipewire pipewire-audio pipewire-alsa pipewire-pulse pipewire-jack wireplumber #Probably in a other script
-systemctl enable sddm
-yay -Syu librewolf-bin rofi-lbonn-wayland 
-#Change keybinds in ~/.config/hypr/hyprland.conf
+
 
 #Virtualisation 
 #Death part ;D

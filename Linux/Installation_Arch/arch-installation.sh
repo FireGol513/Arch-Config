@@ -8,7 +8,7 @@
 ##Install Windows on a partition before install Arch
 
 #All executed commands are printed to the terminal
-set -x
+set -e
 
 #Change the timezone
 timedatectl set-timezone America/New_York
@@ -17,7 +17,7 @@ timedatectl set-timezone America/New_York
 pacman -Syy archlinux-keyring --no-confirm
 
 #Install the basic package for the arch linux environnement
-pacstrap -K /mnt base linux linux-firmware networkmanager grub efibootmgr sudo
+pacstrap -K /mnt base linux linux-firmware networkmanager grub efibootmgr sudo git
 
 #Generated automatic mounting point when we boot
 genfstab -U /mnt >> /etc/fstab
