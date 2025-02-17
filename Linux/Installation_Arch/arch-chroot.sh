@@ -58,7 +58,7 @@ systemctl enable systemd-timesyncd
 sed -i "/\[multilib\]/,/Include/"'s/^#//' /etc/pacman.conf
 
 #Uncomment in visudo the %wheel + Defaults rootpw + Defaults insults
-sed -i "# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/" /etc/sudoers
+sed -i "s/# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/" /etc/sudoers
 sed -i "s/# Defaults targetpw /Defaults rootpw/" /etc/sudoers
 echo "Defaults insults" >> /etc/sudoers
 
