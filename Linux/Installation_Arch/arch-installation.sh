@@ -14,7 +14,7 @@ set -e
 timedatectl set-timezone America/New_York
 
 #Make sure that keyring is up to date to prevent problem when install packages
-pacman -Syy archlinux-keyring --no-confirm
+pacman -Syy archlinux-keyring --noconfirm
 
 #Install the basic package for the arch linux environnement
 pacstrap -K /mnt base linux linux-firmware networkmanager grub efibootmgr sudo git
