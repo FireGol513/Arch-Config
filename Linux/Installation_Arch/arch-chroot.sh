@@ -10,7 +10,7 @@ ln -sf /usr/share/zoneinfo/America/New_York /etc/localtime
 hwclock -wu
 
 #Install a CLI text editor and utils
-pacman -S linux-headers git base-devel vim --no-confirm
+pacman -S linux-headers git base-devel vim --noconfirm
 
 #Uncomment en_US.UTF-8 UTF-8 and ca_FR.UTF-8 UTF-8 in /etc/locale.gen
 cat /etc/locale.gen | sed -e 's/#en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' -e 's/#ca_FR.UTF-8 UTF-8/ca_FR.UTF-8 UTF-8/' > /tmp/locale.gen
