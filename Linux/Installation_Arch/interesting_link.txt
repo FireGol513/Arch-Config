@@ -1,0 +1,19 @@
+#Default installation process
+
+https://wiki.archlinux.org/title/Installation_guide
+
+
+#Windows DualBoot with Archlinux
+
+https://wiki.archlinux.org/title/Dual_boot_with_Windows
+
+
+#Other installation process
+
+https://wiki.archlinux.org/title/Category:Installation_process
+
+
+# Things to do after the installation
+https://wiki.archlinux.org/title/General_recommendations
+
+#

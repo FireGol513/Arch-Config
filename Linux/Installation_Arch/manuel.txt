@@ -1,0 +1,25 @@
+#Do this before running arch_installation.sh script
+
+lsblk
+cfdisk /dev/nvme0n1
+
+#Do a partition of root and swap. We will use the EFI partition of Windows for Arch.
+
+mkfs.fat -F 32 /dev/nvme0np? #Partition of BOOT (EFI)
+mkswap /dev/nvme0n1p? #Partition of SWAP
+mkfs.ext4 /dev/nvme0n1p? #Partition of ROOT
+mount /dev/nvme0n1p? /mnt #Partition of ROOT
+swapon /dev/nvme0n1p? #Partition of SWAP
+
+#Temp for test_installation
+#mount /dev/nvme0n1p? /mnt/boot/efi --mkdir #Partition of BOOT
+
+
+#After run arch_installation.sh script
+
+#Enter in the UEFI Shell with the USB key et execute UEFI_PARTITION_NAME_:/boot/efi/EFI/ et bootx64.efi
+os-prober
+#Uncomment #GRUB_DISABLE_OS_PROBER=false in /etc/default/grub
+grub-mkconfig -o /boot/grub/grub.cfg
+mkinitcpio -P
+#In Windows, execute in cmd -> bcdedit /set {bootmgr} path \EFI\Boot\bootx64.efi
